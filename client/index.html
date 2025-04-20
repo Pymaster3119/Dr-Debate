@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Dr. Debate</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    
+    <!--NavBar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="index.html">Dr. Debate</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+         <ul class="navbar-nav">
+            <li class="nav-item">
+               <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="about.html">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="historicaldebates.html">Historical Debates</a>
+           </li>
+         </ul>
+      </div>
+    </nav>
+
+    <div class="app-wrapper">
+      <main class="app-main">
+        <!--Question Input and Suggestions-->
+        <section id="questioninput" class="question-section">
+          <div class="question-container">
+            <div class="input-wrapper">
+              <input type="text" id="question" class="question-input" placeholder="What would you like to debate?">
+              <button class="ask-button" onclick="onQuestion()">
+                <i class="fas fa-paper-plane"></i>
+                <span>Start Debate</span>
+              </button>
+            </div>
+            <div class="question-suggestions">
+              <button type="button"
+              class="btn btn-outline-primary btn-sm m-1 rounded-pill suggestion-btn"
+              onclick="document.getElementById('question').value='Should remote work be the norm?';">
+              Should remote work be the norm?
+              </button>
+              <button type="button"
+              class="btn btn-outline-secondary btn-sm m-1 rounded-pill suggestion-btn"
+              onclick="document.getElementById('question').value='Is technology enhancing our lives?';">
+              Is technology enhancing our lives?
+              </button>
+              <button type="button"
+              class="btn btn-outline-success btn-sm m-1 rounded-pill suggestion-btn"
+              onclick="document.getElementById('question').value='Are electric cars the future of transportation?';">
+              Are electric cars the future of transportation?
+              </button>
+              <button type="button"
+              class="btn btn-outline-warning btn-sm m-1 rounded-pill suggestion-btn"
+              onclick="document.getElementById('question').value='Should remote learning be permanent?';">
+              Should remote learning be permanent?
+              </button>
+              <button type="button"
+              class="btn btn-outline-danger btn-sm m-1 rounded-pill suggestion-btn"
+              onclick="document.getElementById('question').value='Is online privacy a myth?';">
+              Is online privacy a myth?
+              </button>
+              <button type="button"
+              class="btn btn-outline-info btn-sm m-1 rounded-pill suggestion-btn"
+              onclick="document.getElementById('question').value='Should governments implement stricter social media regulations?';">
+              Should governments implement stricter social media regulations?
+              </button>
+              <button type="button"
+              class="btn btn-outline-dark btn-sm m-1 rounded-pill suggestion-btn"
+              onclick="document.getElementById('question').value='Can artificial intelligence benefit society?';">
+              Can artificial intelligence benefit society?
+              </button>
+              <button type="button"
+              class="btn btn-outline-primary btn-sm m-1 rounded-pill suggestion-btn"
+              onclick="document.getElementById('question').value='Should college tuition be free?';">
+              Should college tuition be free?
+              </button>
+              <button type="button"
+              class="btn btn-outline-secondary btn-sm m-1 rounded-pill suggestion-btn"
+              onclick="document.getElementById('question').value='Is remote healthcare effective?';">
+              Is remote healthcare effective?
+              </button>
+              <button type="button"
+              class="btn btn-outline-success btn-sm m-1 rounded-pill suggestion-btn"
+              onclick="document.getElementById('question').value='Are smartphones making us less social?';">
+              Are smartphones making us less social?
+              </button>
+              <button type="button"
+              class="btn btn-outline-warning btn-sm m-1 rounded-pill suggestion-btn"
+              onclick="document.getElementById('question').value='Should renewable energy be prioritized over fossil fuels?';">
+              Should renewable energy be prioritized over fossil fuels?
+              </button>
+              <button type="button" class="btn btn-outline-primary btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Is social media affecting mental health?';">
+                Is social media affecting mental health?
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Should universal basic income be implemented?';">
+                Should universal basic income be implemented?
+              </button>
+              <button type="button" class="btn btn-outline-success btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Do we need stricter environmental laws?';">
+                Do we need stricter environmental laws?
+              </button>
+              <button type="button" class="btn btn-outline-warning btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Is censorship necessary in media?';">
+                Is censorship necessary in media?
+              </button>
+              <button type="button" class="btn btn-outline-danger btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Should space exploration be prioritized?';">
+                Should space exploration be prioritized?
+              </button>
+              <button type="button" class="btn btn-outline-info btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Does technology reduce our privacy?';">
+                Does technology reduce our privacy?
+              </button>
+              <button type="button" class="btn btn-outline-dark btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Are cryptocurrencies the future of finance?';">
+                Are cryptocurrencies the future of finance?
+              </button>
+              <button type="button" class="btn btn-outline-primary btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Should public transportation be free?';">
+                Should public transportation be free?
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Is globalization beneficial for all?';">
+                Is globalization beneficial for all?
+              </button>
+              <button type="button" class="btn btn-outline-success btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Should we limit the use of fossil fuels?';">
+                Should we limit the use of fossil fuels?
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Waiting Section -->
+        <section id="waiting" class="waiting-section" style="display: none;">
+          <div class="loading-container">
+            <div class="spinner"></div>
+            <h2>Processing Your Question</h2>
+            <p>Your responses are in the queue for processing. The debate should begin soon!</p>
+          </div>
+        </section>
+
+        <!-- Search Queries Section -->
+        <section id="searchqueries" class="search-queries-section" style="display: none;">
+          <div class="search-container">
+            <h2 class="section-title">Available Information</h2>
+            <p class="section-subtitle">The following information is available to the debaters (sourced online):</p>
+            <div class="search-queries-grid"></div>
+            <button class="start-debate-button" id="start-debate" onclick="startDebate()">
+              <i class="fas fa-play"></i>
+              Begin Debate
+            </button>
+            <p id="searchqueriesnote" class="note">
+              We are still generating search queries. Please wait a moment.
+            </p>
+          </div>
+          <div id="searchqueriescontainer"></div>
+        </section>
+
+        <!-- Debate Waiting Section -->
+        <section id="debatewaiting" class="debate-waiting-section" style="display: none;">
+          <div class="loading-container">
+            <div class="spinner"></div>
+            <h2>Preparing the Debate</h2>
+            <p>The debate will begin shortly!</p>
+          </div>
+        </section>
+
+        <!-- Debate Section -->
+        <section id="debate" class="debate-section" style="display: none;">
+          <div class="debate-container">
+            <div class="debate-messages"></div>
+          </div>
+        </section>
+      </main>
+
+      <!--Footer-->
+      <footer class="app-footer">
+        <p>Made by Aditya Anand</p>
+      </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

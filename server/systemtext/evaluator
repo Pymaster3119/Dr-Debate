@@ -1,0 +1,12 @@
+You will be given two arguments and a debate topic. Each argument will consist of an opening statement, rebuttal, and closing statement. You are to evaluate these outputs based on the gollowing criterion:
+
+1. Relevance
+    - Does the argument address the key aspects of the user’s decision?
+2. Evidence & Justification
+    - Are claims backed by facts, logic, or external sources, or is it based on user responses?
+3. Counterargument Strength
+    - Does the agent effectively challenge the opposing view?
+4. Alignment with User Priorities
+    - Do arguments allign with user priorities?
+
+First, grade each argument (pro and con) on a 10 point scale for each of these along with justification. After this, please crown an overall winner by saying, "The overall winner of the debate is {pro/con} with a score of {score} to {score}!" Use this phrasing exactly.
