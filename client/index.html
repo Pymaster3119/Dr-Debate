@@ -39,97 +39,26 @@
           <div class="question-container">
             <div class="input-wrapper">
               <input type="text" id="question" class="question-input" placeholder="What would you like to debate?">
+              <button class="ask-button" onclick="randomSuggestion()">
+                <i class="fas fa-dice"></i>
+              </button>
               <button class="ask-button" onclick="onQuestion()">
                 <i class="fas fa-paper-plane"></i>
-                <span>Start Debate</span>
               </button>
             </div>
-            <div class="question-suggestions">
-              <button type="button"
-              class="btn btn-outline-primary btn-sm m-1 rounded-pill suggestion-btn"
-              onclick="document.getElementById('question').value='Should remote work be the norm?';">
-              Should remote work be the norm?
-              </button>
-              <button type="button"
-              class="btn btn-outline-secondary btn-sm m-1 rounded-pill suggestion-btn"
-              onclick="document.getElementById('question').value='Is technology enhancing our lives?';">
-              Is technology enhancing our lives?
-              </button>
-              <button type="button"
-              class="btn btn-outline-success btn-sm m-1 rounded-pill suggestion-btn"
-              onclick="document.getElementById('question').value='Are electric cars the future of transportation?';">
-              Are electric cars the future of transportation?
-              </button>
-              <button type="button"
-              class="btn btn-outline-warning btn-sm m-1 rounded-pill suggestion-btn"
-              onclick="document.getElementById('question').value='Should remote learning be permanent?';">
-              Should remote learning be permanent?
-              </button>
-              <button type="button"
-              class="btn btn-outline-danger btn-sm m-1 rounded-pill suggestion-btn"
-              onclick="document.getElementById('question').value='Is online privacy a myth?';">
-              Is online privacy a myth?
-              </button>
-              <button type="button"
-              class="btn btn-outline-info btn-sm m-1 rounded-pill suggestion-btn"
-              onclick="document.getElementById('question').value='Should governments implement stricter social media regulations?';">
-              Should governments implement stricter social media regulations?
-              </button>
-              <button type="button"
-              class="btn btn-outline-dark btn-sm m-1 rounded-pill suggestion-btn"
-              onclick="document.getElementById('question').value='Can artificial intelligence benefit society?';">
-              Can artificial intelligence benefit society?
-              </button>
-              <button type="button"
-              class="btn btn-outline-primary btn-sm m-1 rounded-pill suggestion-btn"
-              onclick="document.getElementById('question').value='Should college tuition be free?';">
-              Should college tuition be free?
-              </button>
-              <button type="button"
-              class="btn btn-outline-secondary btn-sm m-1 rounded-pill suggestion-btn"
-              onclick="document.getElementById('question').value='Is remote healthcare effective?';">
-              Is remote healthcare effective?
-              </button>
-              <button type="button"
-              class="btn btn-outline-success btn-sm m-1 rounded-pill suggestion-btn"
-              onclick="document.getElementById('question').value='Are smartphones making us less social?';">
-              Are smartphones making us less social?
-              </button>
-              <button type="button"
-              class="btn btn-outline-warning btn-sm m-1 rounded-pill suggestion-btn"
-              onclick="document.getElementById('question').value='Should renewable energy be prioritized over fossil fuels?';">
-              Should renewable energy be prioritized over fossil fuels?
-              </button>
-              <button type="button" class="btn btn-outline-primary btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Is social media affecting mental health?';">
-                Is social media affecting mental health?
-              </button>
-              <button type="button" class="btn btn-outline-secondary btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Should universal basic income be implemented?';">
-                Should universal basic income be implemented?
-              </button>
-              <button type="button" class="btn btn-outline-success btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Do we need stricter environmental laws?';">
-                Do we need stricter environmental laws?
-              </button>
-              <button type="button" class="btn btn-outline-warning btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Is censorship necessary in media?';">
-                Is censorship necessary in media?
-              </button>
-              <button type="button" class="btn btn-outline-danger btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Should space exploration be prioritized?';">
-                Should space exploration be prioritized?
-              </button>
-              <button type="button" class="btn btn-outline-info btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Does technology reduce our privacy?';">
-                Does technology reduce our privacy?
-              </button>
-              <button type="button" class="btn btn-outline-dark btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Are cryptocurrencies the future of finance?';">
-                Are cryptocurrencies the future of finance?
-              </button>
-              <button type="button" class="btn btn-outline-primary btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Should public transportation be free?';">
-                Should public transportation be free?
-              </button>
-              <button type="button" class="btn btn-outline-secondary btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Is globalization beneficial for all?';">
-                Is globalization beneficial for all?
-              </button>
-              <button type="button" class="btn btn-outline-success btn-sm m-1 rounded-pill suggestion-btn" onclick="document.getElementById('question').value='Should we limit the use of fossil fuels?';">
-                Should we limit the use of fossil fuels?
-              </button>
+
+            <div class="stance-toggle-container">
+              <div class="stance-switch">
+                <input type="radio" id="stance-pro" name="stance" value="pro" checked>
+                <label for="stance-pro" class="switch-label pro">Pro</label>
+                <input type="radio" id="stance-con" name="stance" value="con">
+                <label for="stance-con" class="switch-label con">Con</label>
+                <span class="switch-handle"></span>
+              </div>
+            </div>
+            
+            <div class="question-suggestions" id="question-suggestions">
+              <!--Will be filled in by JS-->
             </div>
           </div>
         </section>
@@ -186,6 +115,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
