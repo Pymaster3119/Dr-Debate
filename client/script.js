@@ -294,65 +294,48 @@ function fetchdebate()
         }
       });
     
-      // Determine if an input bubble should be shown
-      const lastMessage = data.debate.length > 0 ? data.debate[data.debate.length - 1] : null; // Moved this line up
-      console.log("Stance: " + stance);
-      console.log("Last message: " + JSON.stringify(lastMessage));
-      console.log("Debate length: " + data.debate.length);
-      let showInputBubble = false;
-      let inputSpeakerType = ""; 
-
-      if (stance === "pro") {
-        if (!lastMessage || (lastMessage && lastMessage.speaker === "con" && data.debate.length !== 6)) {
-          showInputBubble = true;
-          inputSpeakerType = "pro";
-        }
-      } else if (stance === "con") {
-        if (lastMessage && lastMessage.speaker === "pro") {
-          showInputBubble = true;
-          inputSpeakerType = "con";
-        }
-      }
-
-      if (showInputBubble) {
-        const inputWrapper = document.createElement("div");
-        inputWrapper.className = `message-wrapper ${inputSpeakerType === "con" ? "right" : "left"} input-message`;
-      
-        const inputBubble = document.createElement("div");
-        inputBubble.className = `bubble bubble-${inputSpeakerType === "pro" ? "left" : "right"}`;
-        inputBubble.style.maxWidth = "80%";
-        inputBubble.style.minWidth = "70%";
-      
-        const textInput = document.createElement("textarea");
-        textInput.placeholder = "Type your message...";
-        textInput.className = `${inputSpeakerType}-input-text`; 
-        textInput.style.backgroundColor = "rgba(255, 255, 255, 0)";
-        textInput.style.color = inputSpeakerType === "pro" ? "#000000" : "#ffffff";
-        textInput.style.border = "none";
-        textInput.style.minWidth = "95%";
-        textInput.style.maxWidth = "95%";
+      // If the last message was from the pro side, add a con input bubble with a send icon
+      if (data.debate.length > 0) {
+        const lastMessage = data.debate[data.debate.length - 1];
+        if (lastMessage.speaker === "pro") {
+          const inputWrapper = document.createElement("div");
+          inputWrapper.className = "message-wrapper right input-message";
         
-      
-        const sendIcon = document.createElement("i");
-        sendIcon.className = "fas fa-paper-plane";
-
-        inputBubble.appendChild(textInput);
-        inputBubble.appendChild(sendIcon);
-        inputWrapper.appendChild(inputBubble);
-      
-        debateDiv.appendChild(inputWrapper);
-        sendIcon.addEventListener("click", () => {
-          const message = textInput.value.trim();
-          if (!message) return;
-          fetch('/appendToDebate', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              userhash: hash,
-              message: message,
-              speaker: stance // User's current stance
+          const inputBubble = document.createElement("div");
+          inputBubble.className = "bubble bubble-right";
+          inputBubble.style.maxWidth = "80%";
+          inputBubble.style.minWidth = "70%";
+        
+          const textInput = document.createElement("textarea");
+          textInput.placeholder = "Type your message...";
+          textInput.className = "con-input-text";
+          textInput.style.backgroundColor = "rgba(255, 255, 255, 0)";
+          textInput.style.color = "#ffffff";
+          textInput.style.border = "none";
+          textInput.style.minWidth = "95%";
+          textInput.style.maxWidth = "95%";
+          
+        
+          const sendIcon = document.createElement("i");
+          sendIcon.className = "fas fa-paper-plane";
+          inputBubble.appendChild(textInput);
+          inputBubble.appendChild(sendIcon);
+          inputWrapper.appendChild(inputBubble);
+        
+          debateDiv.appendChild(inputWrapper);
+          sendIcon.addEventListener("click", () => {
+            const message = textInput.value.trim();
+            if (!message) return;
+            fetch('/appendToDebate', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                userhash: hash,
+                message: message,
+                speaker: "con"
+              })
             })
           })
           .then(() => {

@@ -1,0 +1,1 @@
+[{"speaker": "pro", "type": "opening", "content": "pro"}, {"speaker": "con", "type": "rebuttal", "content": "Hello!"}, {"speaker": "pro", "type": "opening", "content": "hi"}, {"speaker": "con", "type": "rebuttal", "content": "Hello!"}, {"speaker": "pro", "type": "opening", "content": "hi"}, {"speaker": "con", "type": "rebuttal", "content": "Hello!"}]

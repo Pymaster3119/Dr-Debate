@@ -100,6 +100,10 @@ def background_task(user):
 def topics():
     return send_from_directory(app.static_folder, 'debatetopics')
 
+@app.route('/debatetopics', methods=['POST'])
+def topics():
+    return send_from_directory(app.static_folder, 'debatetopics')
+
 @app.route('/getSearchQueries', methods=['POST'])
 def getSearchQueries():
     data = request.get_json()
