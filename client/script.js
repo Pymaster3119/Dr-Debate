@@ -300,7 +300,7 @@ function fetchdebate()
       console.log("Last message: " + JSON.stringify(lastMessage));
       console.log("Debate length: " + data.debate.length);
       let showInputBubble = false;
-      let inputSpeakerType = ""; // "pro" or "con"
+      let inputSpeakerType = ""; 
 
       if (stance === "pro") {
         if (!lastMessage || (lastMessage && lastMessage.speaker === "con" && data.debate.length !== 6)) {

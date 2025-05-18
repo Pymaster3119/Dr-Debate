@@ -21,6 +21,7 @@ searchqueries = {}
 searchqueriesanswers = {}
 previousdebate = {}
 newestmessage = {}
+timers = {}
 
 app = Flask(__name__, static_folder='../client')
 
@@ -51,6 +52,8 @@ def find_search_query_answers(user, number):
 
 def background_task(user):
     while True:
+        if user in timers and time.time()-timers[user] > 60:
+            break
         try:
             if userstates[user] == 0:
                 searchqueries[user] = gatheringinfo.searchqueries(userquestions[user])
@@ -88,7 +91,11 @@ def background_task(user):
             time.sleep(0.1)
         except Exception as e:
             print(f"Exception: {e}")
-
+    print(f"Thread for user {user} has stopped.")
+    
+    #Delete debate file
+    if os.path.exists(f'debatefiles/{user}.txt'):
+        os.remove(f"debatefiles/{user}.txt")
 @app.route('/debatetopics', methods=['POST'])
 def topics():
     return send_from_directory(app.static_folder, 'debatetopics')
@@ -105,6 +112,7 @@ def startDebate():
     data = request.get_json()
     userhash = data['userhash']
     userstates[userhash] = 3
+    timers[userhash] = time.time()
     return "successfully received", 200
 
 @app.route('/getDebate', methods=['POST'])
@@ -121,6 +129,7 @@ def returndebatestate():
         with open(debatefile, 'r') as file:
             debatecontent = debate.json.load(file)
         previousdebate[userhash] = debatecontent
+        timers[userhash] = time.time()
         return {"debate": debatecontent}, 200
     else:
         return "No debate available", 404
