@@ -1,7 +1,7 @@
 # Dr. Debate
 
 ## How to run
-1. Create a file at DebateDaddy/key.txt containing an OpenAI API key
+1. Create a file at Dr Debate/key.txt containing an OpenAI API key
 2. Run the app.py python application
 3. Visit the address localhost:8080
 4. If this does not work, try changing the network. Possibly, try joining youir cell phone's mobile data, if possible
@@ -12,7 +12,7 @@ About - a quick summary of the page nad the creator
 Historical Debates - an archive containing 10 historical debates that users can look through and ask a GPT agent about
 
 ## File structure
-DebateDaddy/  
+Dr Debate/  
 ├── client/  
 │   ├── index.html - the interactive debate's HTML code  
 │   ├── historicaldebates.py - the archive of debates' HTML code  

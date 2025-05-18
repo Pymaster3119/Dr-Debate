@@ -15,6 +15,7 @@ import debateanalyser
 
 userstates = {}
 userquestions = {}
+userstances = {}
 askedquestions = {}
 searchqueries = {}
 searchqueriesanswers = {}
@@ -32,6 +33,7 @@ def send_question():
     data = request.get_json()
     userhash = data['userhash']
     userquestions[userhash] = data['question']
+    userstances[userhash] = data['stance']
     userstates[userhash] = 0
     threading.Thread(target=background_task, args=(userhash,), daemon=True).start()
     return "successfully received", 200
@@ -44,31 +46,52 @@ def index():
 def static_files(path):
     return send_from_directory(app.static_folder, path)
 
+def find_search_query_answers(user, number):
+    searchqueriesanswers[user][searchqueries[user][number]] = gatheringinfo.handlesearchqueries(searchqueries[user][number])
+
 def background_task(user):
     while True:
         try:
             if userstates[user] == 0:
-                searchqueries = gatheringinfo.searchqueries(userquestions[user])
+                searchqueries[user] = gatheringinfo.searchqueries(userquestions[user])
                 print(searchqueries)
                 userstates[user] = 1
             if userstates[user] == 1:
                 searchqueriesanswers[user] = {}
                 print("hehehehehehe")
-                for i in searchqueries:
-                    searchqueriesanswers[user][i] = gatheringinfo.handlesearchqueries(i)
-                userstates[user] = 2
+                for i in range(len(searchqueries[user])):
+                    threading.Thread(target=find_search_query_answers, args=(user, i), daemon=True).start()
+                userstates[user] = 1.5
+            if userstates[user] == 1.5:
+                allanswers = True
+                for query in searchqueries[user]:
+                    if query not in searchqueriesanswers[user]:
+                        allanswers = False
+                if allanswers:
+                    userstates[user] = 2
             if userstates[user] == 3:
-                opening_statement = debate.openingstatement(userquestions[user], searchqueriesanswers[user])
-                with open(f"debatefiles/{user}.txt", "w") as f:
-                    debate.json.dump([{"speaker": "pro", "type": "opening", "content": opening_statement}], f)
-                userstates[user] = 4
+                if userstances[user] == "con":
+                    opening_statement = debate.pro_openingstatement(userquestions[user], searchqueriesanswers[user])
+                    with open(f"debatefiles/{user}.txt", "w") as f:
+                        debate.json.dump([{"speaker": "pro", "type": "opening", "content": opening_statement}], f)
+                else:
+                    with open(f"debatefiles/{user}.txt", "w") as f:
+                        debate.json.dump([], f)
+                userstates[user] = 4    # Set state to 4 for both stances
             if userstates[user] == 4 and user in newestmessage and newestmessage[user] != "":
                 print("Helloeofijsdfoijaswoifoiasduoiahtouhoawsr")
-                debate.debate_append(f"debatefiles/{user}.txt", userquestions[user], searchqueriesanswers[user], newestmessage[user])
+                if userstances[user] == "con":
+                    debate.pro_debate_append(f"debatefiles/{user}.txt", userquestions[user], searchqueriesanswers[user], newestmessage[user])
+                else:
+                    debate.con_debate_append(f"debatefiles/{user}.txt", userquestions[user], searchqueriesanswers[user], newestmessage[user])
                 newestmessage[user] = ""
             time.sleep(0.1)
         except Exception as e:
             print(f"Exception: {e}")
+
+@app.route('/debatetopics', methods=['POST'])
+def topics():
+    return send_from_directory(app.static_folder, 'debatetopics')
 
 @app.route('/getSearchQueries', methods=['POST'])
 def getSearchQueries():
@@ -108,6 +131,7 @@ def appendToDebate():
     userhash = data['userhash']
     message = data['message']
     newestmessage[userhash] = message
+    return "DOne", 200
 
 '''
 Less important part: the most influential debates
