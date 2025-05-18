@@ -23,6 +23,9 @@ previousdebate = {}
 newestmessage = {}
 timers = {}
 
+numdebates = 1
+totalanalyses = 1
+
 app = Flask(__name__, static_folder='../client')
 
 
@@ -41,6 +44,7 @@ def send_question():
 
 @app.route('/')
 def index():
+    global numdebates
     return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/<path:path>')
@@ -51,6 +55,7 @@ def find_search_query_answers(user, number):
     searchqueriesanswers[user][searchqueries[user][number]] = gatheringinfo.handlesearchqueries(searchqueries[user][number])
 
 def background_task(user):
+    global numdebates
     while True:
         if user in timers and time.time()-timers[user] > 60:
             break
@@ -88,6 +93,10 @@ def background_task(user):
                 else:
                     debate.con_debate_append(f"debatefiles/{user}.txt", userquestions[user], searchqueriesanswers[user], newestmessage[user])
                 newestmessage[user] = ""
+                with open(f"debatefiles/{user}.txt", "r") as f:
+                    data = debate.json.load(f)
+                    if len(data) == 7:
+                        numdebates += 1
             time.sleep(0.1)
         except Exception as e:
             print(f"Exception: {e}")
@@ -96,10 +105,6 @@ def background_task(user):
     #Delete debate file
     if os.path.exists(f'debatefiles/{user}.txt'):
         os.remove(f"debatefiles/{user}.txt")
-@app.route('/debatetopics', methods=['POST'])
-def topics():
-    return send_from_directory(app.static_folder, 'debatetopics')
-
 @app.route('/debatetopics', methods=['POST'])
 def topics():
     return send_from_directory(app.static_folder, 'debatetopics')
@@ -168,12 +173,25 @@ def returnDebate():
 
 @app.route('/getDebateAnalysis', methods=['POST'])
 def returnDebateAnalysis():
+    global totalanalyses
     data = request.get_json()
     debatename = data['debatename']
     highlights = data['highlights']
     messages = data['messages']
     response = debateanalyser.debateanalyser(messages, debatename, highlights)
+    totalanalyses += 1
     return {"analysis": response}, 200
 
+'''
+Less important part: the about page
+'''
+
+@app.route('/numDebates', methods=['POST'])
+def numDebates():
+    return {"numDebates": numdebates}, 200
+
+@app.route('/numAnalyses', methods=['POST'])
+def numAnalyses():
+    return {"numAnalyses": totalanalyses}, 200
 if __name__ == '__main__':
     app.run(debug=False, port=8080)

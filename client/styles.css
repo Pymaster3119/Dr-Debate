@@ -498,3 +498,31 @@ body {
 .stance-switch input#stance-con:checked ~ .switch-handle {
     background-color: #f44336; /* Red for Con */
 }
+
+/* About page */
+.jumbotron {
+  background-image: url('https://images.unsplash.com/photo-1491980692252-4d3cdd8b1e8d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  position: relative;
+  margin-bottom: 0;
+}
+.jumbotron .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.6), rgba(124, 58, 237, 0.6));
+}
+.jumbotron .container {
+  position: relative;
+  z-index: 2;
+}
+.jumbotron h1 {
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+}
+.jumbotron p.lead {
+  text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.6);
+}
