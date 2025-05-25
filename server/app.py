@@ -1,11 +1,11 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request
 import os
-from flask import request
 import threading
 import time
 import gatheringinfo
 import debate
 import debateanalyser
+import sqlite3
 
 # 0 - question asked from user->app
 # 1 - search queries generated
@@ -21,6 +21,7 @@ searchqueries = {}
 searchqueriesanswers = {}
 previousdebate = {}
 newestmessage = {}
+isuser = {}
 timers = {}
 
 numdebates = 1
@@ -28,10 +29,7 @@ totalanalyses = 1
 
 app = Flask(__name__, static_folder='../client')
 
-
-'''
-Most important part: the practice debate
-'''
+#region Practice Debate
 @app.route('/sendQuestion', methods=['POST'])
 def send_question():
     data = request.get_json()
@@ -97,6 +95,13 @@ def background_task(user):
                     data = debate.json.load(f)
                     if len(data) == 7:
                         numdebates += 1
+                        if isuser[user]:
+                            cur.execute("UPDATE users SET debate_count = debate_count + 1 WHERE username=?", (user,))
+                            conn.commit()
+                            if data[6]['winner'].lower() == userstances[user].lower():
+                                cur.execute("UPDATE users SET debate_wins = debate_wins + 1 WHERE username=?", (user,))
+                                conn.commit()
+                                print("User won the debate")
             time.sleep(0.1)
         except Exception as e:
             print(f"Exception: {e}")
@@ -120,6 +125,8 @@ def getSearchQueries():
 def startDebate():
     data = request.get_json()
     userhash = data['userhash']
+    isusername = data['isuser']
+    isuser[userhash] = isusername
     userstates[userhash] = 3
     timers[userhash] = time.time()
     return "successfully received", 200
@@ -150,10 +157,9 @@ def appendToDebate():
     message = data['message']
     newestmessage[userhash] = message
     return "DOne", 200
+#endregion
 
-'''
-Less important part: the most influential debates
-'''
+#region Debate Analysis
 @app.route('/getAllDebateNames', methods=['POST'])
 def returnalldebates():
     debatefiles = os.listdir("influentialdebates")
@@ -181,10 +187,9 @@ def returnDebateAnalysis():
     response = debateanalyser.debateanalyser(messages, debatename, highlights)
     totalanalyses += 1
     return {"analysis": response}, 200
+#endregion
 
-'''
-Less important part: the about page
-'''
+#region About Page
 
 @app.route('/numDebates', methods=['POST'])
 def numDebates():
@@ -193,5 +198,68 @@ def numDebates():
 @app.route('/numAnalyses', methods=['POST'])
 def numAnalyses():
     return {"numAnalyses": totalanalyses}, 200
+#endregion
+
+#region signin/signup, user profiles
+conn = sqlite3.connect('server/users.db', check_same_thread=False)
+cur = conn.cursor()
+
+cur.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY,
+        username TEXT NOT NULL,
+        password TEXT NOT NULL,
+        debate_count INTEGER DEFAULT 0,
+        debate_wins INTEGER DEFAULT 0
+    )
+''')
+conn.commit()
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    data = request.get_json()
+    username = data['username']
+    password = data['password']
+    
+    cur.execute('SELECT * FROM users WHERE username=?', (username,))
+    if cur.fetchone() is not None:
+        return "Username already exists", 400
+    
+    cur.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
+    conn.commit()
+    
+    return {'success': True}, 200
+
+@app.route('/signin', methods=['POST'])
+def signin():
+    data = request.get_json()
+    username = data['username']
+    password = data['password']
+    
+    cur.execute('SELECT * FROM users WHERE username=? AND password=?', (username, password))
+    user = cur.fetchone()
+    
+    if user is None:
+        return "Invalid credentials", 400
+    
+    return {'success': True}, 200
+
+@app.route('/getUserDebateCount', methods=['POST'])
+def get_user_debate_count():
+    print("Here")
+    data = request.get_json()
+    username = data['username']
+    
+    cur.execute('SELECT debate_count, debate_wins FROM users WHERE username=?', (username,))
+    result = cur.fetchone()
+    
+    if result is None:
+        return "User not found", 404
+    
+    debate_count = result[0]
+    debate_wins = result[1]
+    return {'debate_count': debate_count, 'debate_wins': debate_wins}, 200
+#endregion
+
 if __name__ == '__main__':
     app.run(debug=False, port=8080)

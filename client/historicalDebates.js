@@ -1,3 +1,21 @@
+const cookies = document.cookie.split('; ');
+let username = null;
+for (let cookie of cookies) {
+  if (cookie.startsWith('username=')) {
+    console.log("Cookie 'username' found:", decodeURIComponent(cookie.split('=')[1]));
+    username = decodeURIComponent(cookie.split('=')[1]);
+  }
+}
+if (username) {
+  
+  singin = document.getElementById("signin");
+  signin.innerHTML = `<li class="nav-item">
+            <a class="nav-link" href="profile.html">
+              <i class="fas fa-user"></i> ${username}
+            </a>
+          </li>`;
+}
+
 //Populate the list of historical debates
 const debatelist = document.getElementById('debate-list');
 

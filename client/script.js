@@ -5,13 +5,46 @@
 // 4 - debate in progress 
 
 // Create hash
-const now = new Date().getTime();
-const browser = navigator.userAgent;
-const random = Math.random().toString(36).substring(2, 15);
-const hash = btoa(`${now}-${browser}-${random}`);
+const cookies = document.cookie.split('; ');
+let username = null;
+for (let cookie of cookies) {
+  if (cookie.startsWith('username=')) {
+    console.log("Cookie 'username' found:", decodeURIComponent(cookie.split('=')[1]));
+    username = decodeURIComponent(cookie.split('=')[1]);
+  }
+}
+if (username) {
+  console.log("Cookie 'username' found:", username);
+  hash = username;
+}
+else {
+  const now = new Date().getTime();
+  const browser = navigator.userAgent;
+  const random = Math.random().toString(36).substring(2, 15);
+  hash = btoa(`${now}-${browser}-${random}`);
+}
+
+// Replace signup/signin with username
+for (let cookie of cookies) {
+  if (cookie.startsWith('username=')) {
+    console.log("Cookie 'username' found:", decodeURIComponent(cookie.split('=')[1]));
+    username = decodeURIComponent(cookie.split('=')[1]);
+  }
+}
+if (username) {
+  
+  singin = document.getElementById("signin");
+  signin.innerHTML = `<li class="nav-item">
+            <a class="nav-link" href="profile.html">
+              <i class="fas fa-user"></i> ${username}
+            </a>
+          </li>`;
+}
+
 state = -1;
 stance = NaN;
-const sourcesState = {}; // Added to store toggle states
+
+const sourcesState = {};
 
 //Load suggestions
 
@@ -223,7 +256,7 @@ function startDebate() {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({userhash: hash})
+    body: JSON.stringify({userhash: hash, isuser: username !== null})
   })
   
   fetchdebate();
