@@ -14,8 +14,18 @@ for (let cookie of cookies) {
   }
 }
 if (username) {
-  console.log("Cookie 'username' found:", username);
-  hash = username;
+  fetch('/getUserDebateCount', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({username: username})
+  })
+  .then(response => response.json())
+  .then(data => {
+      document.getElementById('totalDebates').textContent = data.debate_count;
+      hash = username + "  " + data.debate_count;
+  })
 }
 else {
   const now = new Date().getTime();

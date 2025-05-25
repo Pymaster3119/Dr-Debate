@@ -96,10 +96,10 @@ def background_task(user):
                     if len(data) == 7:
                         numdebates += 1
                         if isuser[user]:
-                            cur.execute("UPDATE users SET debate_count = debate_count + 1 WHERE username=?", (user,))
+                            cur.execute("UPDATE users SET debate_count = debate_count + 1 WHERE username=?", (user.split("  ")[0],))
                             conn.commit()
                             if data[6]['winner'].lower() == userstances[user].lower():
-                                cur.execute("UPDATE users SET debate_wins = debate_wins + 1 WHERE username=?", (user,))
+                                cur.execute("UPDATE users SET debate_wins = debate_wins + 1 WHERE username=?", (user.split("  ")[0],))
                                 conn.commit()
                                 print("User won the debate")
             time.sleep(0.1)
